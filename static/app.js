@@ -1,6 +1,6 @@
 const SERVER_IP = "127.0.0.1"
 
-$("#idform").hide();
+$("#ws-connect").hide();
 $("#dcform").hide();
 $("#sendform").hide();
 
@@ -16,12 +16,19 @@ var ws = null;
 var user = "";
 var user2 = "";
 
+function setMyId(e){
+    e.preventDefault();
+    user = $("#user").val();
+    $("#ws-connect").show();
+    return false;
+}
+
 $("#ws-connect").click(function(){
-    ws = new WebSocket("ws://" + SERVER_IP +":8088");
+    ws = new WebSocket("ws://" + SERVER_IP + ":8088/" + user);
 
     ws.onopen = function(e){    
         console.log("Websocket opened");
-        $("#idform").show();
+        $("#dcform").show();
     }
     ws.onclose = function(e){   
         console.log("Websocket closed");
@@ -60,13 +67,6 @@ $("#ws-connect").click(function(){
         console.log("Websocket error");
     }
 });
-
-function setMyId(e){
-    e.preventDefault();
-    user = $("#user").val();
-    $("#dcform").show();
-    return false;
-}
 
 var config = {"iceServers":[{"url":"stun:stun.l.google.com:19302"}]};
 var connection = {};
